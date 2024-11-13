@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.admin_module.mapper.UserMapper">
+
+    <resultMap type="com.example.admin_module.entity.User" id="UserResult">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="age" column="age"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+    </resultMap>
+
+    <sql id="selectUser">
+        select `id`,`username`,`password`,`age`,`gender`,`phone`,`created_at` from users
+    </sql>
+
+    <select id="listUser" resultMap="UserResult">
+        <include refid="selectUser"></include>
+    </select>
+
+    <select id="selectUserById" resultMap="UserResult">
+        <include refid="selectUser"></include>
+        where `id` = #{id};
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.admin_module.entity.User" useGeneratedKeys="true">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">`username`,</if>
+            <if test="password != null and password != ''">`password`,</if>
+            <if test="age != null and age != ''">`age`,</if>
+            <if test="gender != null and gender != ''">`gender`,</if>
+            <if test="phone != null and phone != ''">`phone`,</if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="age != null and age != ''">#{age},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteUserById" parameterType="integer">
+        delete from login where `id` = #{id}
+    </delete>
+
+    <update id="updateUser" parameterType="com.example.admin_module.entity.User">
+        update users
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null and username != ''">`username` = #{username},</if>
+            <if test="password != null and password != ''">`password`= #{password},</if>
+            <if test="age != null and age != ''">`age` = #{age},</if>
+            <if test="gender != null and gender != ''">`gender` = #{gender},</if>
+            <if test="phone != null and phone != ''">`phone` = #{phone}</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+</mapper>
