@@ -1,3 +1,2 @@
-###infront需要用cmd打开
-'''bash
+```cmd
 npm run dev
